@@ -19,4 +19,12 @@ public class Maglietta {
     public String getScritta() {
         return scritta;
     }
+
+    @Override
+    public String toString() {
+        return "Maglietta{" +
+                "taglia='" + taglia + '\'' +
+                ", scritta='" + scritta + '\'' +
+                '}';
+    }
 }

@@ -19,4 +19,12 @@ public class Acquirente {
     public String getEmail() {
         return email;
     }
+
+    @Override
+    public String toString() {
+        return "Acquirente{" +
+                "nome='" + nome + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

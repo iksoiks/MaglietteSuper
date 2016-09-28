@@ -1,4 +1,3 @@
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,5 +36,15 @@ public class Pagamento {
 
     public double getNetto() {
         return lordo-tariffa;
+    }
+
+    @Override
+    public String toString() {
+        return "Pagamento{" +
+                "carrello=" + carrello +
+                ", acquirente=" + acquirente +
+                ", lordo=" + lordo +
+                ", tariffa=" + tariffa +
+                '}';
     }
 }
