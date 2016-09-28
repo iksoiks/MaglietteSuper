@@ -6,23 +6,6 @@ import java.util.Set;
 
 public class Main {
 
-    private static final String SCRITTA_1 = "May the source be with you";
-    private static final String SCRITTA_2 = "Programmers don't byte, just a bit";
-    private static final String SCRITTA_3 = "There's no place like /home";
-    private static final String SCRITTA_4 = "I turn coffee into code";
-    private static final String SCRITTA_5 = "Trust me, I am a programmer";
-    private static final String SCRITTA_6 = "Error 404: brain not found";
-
-    private static final String S = "S";
-    private static final String M = "M";
-    private static final String L = "L";
-    private static final String XL = "XL";
-    private static final String XXL = "XXL";
-    private static final String XXXL = "3XL";
-
-    private static List<String> scritte;
-    private static List<String> taglie;
-
     public static void main(String[] args) {
         List<Pagamento> pagamenti = Parser.getPagamentiFromFolder(new File("."));
         riepilogoAcquirenti(pagamenti);
