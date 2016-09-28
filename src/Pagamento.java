@@ -35,7 +35,7 @@ public class Pagamento {
     }
 
     public double getNetto() {
-        return lordo-tariffa;
+        return lordo + tariffa;
     }
 
     @Override
@@ -45,6 +45,7 @@ public class Pagamento {
                 ", acquirente=" + acquirente +
                 ", lordo=" + lordo +
                 ", tariffa=" + tariffa +
+                ", netto=" + getNetto() +
                 '}';
     }
 }
