@@ -1,8 +1,5 @@
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Main {
 
@@ -63,6 +60,32 @@ public class Main {
             }
         }
         System.out.println("\nSomma Magliette: " + sum);
+    }
+
+    private static List<Email> mailGenerator(List<Pagamento> pagamenti) {
+        LinkedList<Email> emails = new LinkedList<>();
+        for (Pagamento pagamento : pagamenti) {
+            Email email = new Email();
+            Acquirente acquirente = pagamento.getAcquirente();
+            email.setToMail(acquirente.getEmail());
+            email.setToName(acquirente.getNome());
+            email.setFromMail("info@lugroma3.org");
+            email.setFromName("LUG Roma Tre");
+            email.setSubject("Promemoria ritiro maglietta acquistata");
+            StringBuilder message = new StringBuilder();
+            Map<Maglietta, Integer> carrello = pagamento.getCarrello();
+            message.append("Ciao! Ti ricordiamo che potrai ritirare ");
+            if (carrello.size() == 1) message.append("la tua maglietta personalizzata acquistata");
+            else message.append("le tue magliette personalizzate, acquistate");
+            message.append(" sul sito http://ld16.lugroma3.org, all'evento del Linux Day Roma 2016.");
+            message.append("\n\nDove: Dipartimento di Ingegneria, Università degli Studi Roma Tre");
+            message.append("\nQuando: Sabato 22 Ottobre 2016");
+            message.append("\n\n");
+            email.setMessage(message.toString());
+            emails.add(email);
+        }
+
+        return null;
     }
 
 }
