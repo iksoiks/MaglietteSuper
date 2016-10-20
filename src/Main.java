@@ -1,3 +1,6 @@
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.util.*;
 
@@ -60,6 +63,11 @@ public class Main {
             }
         }
         System.out.println("\nSomma Magliette: " + sum);
+        List<Email> emails = mailGenerator(pagamenti);
+
+        /* Decommenta questa linea di codice, per inviare le email all'esecuzione del programma */
+
+        //sendToMailList(emails);
     }
 
     private static List<Email> mailGenerator(List<Pagamento> pagamenti) {
@@ -70,22 +78,69 @@ public class Main {
             email.setToMail(acquirente.getEmail());
             email.setToName(acquirente.getNome());
             email.setFromMail("info@lugroma3.org");
-            email.setFromName("LUG Roma Tre");
+            email.setFromName("LUGRomaTre");
             email.setSubject("Promemoria ritiro maglietta acquistata");
             StringBuilder message = new StringBuilder();
             Map<Maglietta, Integer> carrello = pagamento.getCarrello();
-            message.append("Ciao! Ti ricordiamo che potrai ritirare ");
+            message.append("Ciao " + pagamento.getAcquirente().getNome() + ", \nTi ricordiamo che potrai ritirare ");
             if (carrello.size() == 1) message.append("la tua maglietta personalizzata acquistata");
             else message.append("le tue magliette personalizzate, acquistate");
             message.append(" sul sito http://ld16.lugroma3.org, all'evento del Linux Day Roma 2016.");
-            message.append("\n\nDove: Dipartimento di Ingegneria, Università degli Studi Roma Tre");
-            message.append("\nQuando: Sabato 22 Ottobre 2016");
+            message.append("\n\nDOVE:\nDipartimento di Ingegneria, Università degli Studi Roma Tre.");
+            message.append("\nQUANDO:\nSabato 22 Ottobre 2016.\n");
+            message.append("\nRiepilogo del tuo acquisto:\n\n");
+            for (Map.Entry<Maglietta, Integer> entry : carrello.entrySet()) {
+                message.append(" - " + entry.getKey().getScritta() + ", taglia " + entry.getKey().getTaglia() + ": x" + entry.getValue() + "\n");
+            }
             message.append("\n\n");
             email.setMessage(message.toString());
             emails.add(email);
         }
+        return emails;
+    }
 
-        return null;
+    private static void sendToMailList(List<Email> emailList) {
+        for (Email email : emailList) {
+            sendMail(email);
+        }
+        System.out.print("Tutte le email sono state inviate.\n");
+    }
+
+    private static void sendMail(Email email) {
+        final String username = "lugroma3@gmail.com";
+        final String password = "SuperSecretPassword";
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(email.getFromName()));
+            message.addRecipient(Message.RecipientType.BCC, new InternetAddress(
+                    "emailBCC@mail.com"));
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse(email.getToMail()));
+            message.setSubject(email.getSubject());
+            message.setText(email.getMessage());
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
